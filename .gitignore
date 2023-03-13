@@ -1,1 +1,6 @@
 /venv/
+**/__pycache__
+**/cache_files
+**/.idea
+/frontend/node_modules/
+/static/frontend/
