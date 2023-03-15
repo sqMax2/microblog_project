@@ -5,7 +5,7 @@ export default class PostService{
     constructor(){}
 
     getPosts() {
-        const url = `${API_URL}/api/posts/`;
+        const url = `${API_URL}/api/posts`;
         return axios.get(url).then(response => response.data);
     }
 
@@ -15,7 +15,7 @@ export default class PostService{
     }
 
     createPost(text){
-		const url = `${API_URL}/api/posts/`;
+		const url = `${API_URL}/api/posts`;
 		return axios.post(url,text);
 	}
 }
