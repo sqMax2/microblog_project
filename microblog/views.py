@@ -13,16 +13,16 @@ from .serializers import *
 def posts(request):
     print(request.__dict__)
     print('method: ', request.method)
-    print('req: ', request.data)
+    print('data: ', request.data)
     if request.method == 'GET':
         posts = Post.objects.all()
         serializer = PostSerializer(posts, many=True)
-        return Response({'data': serializer.data})
+        return Response({'data': serializer.data}, headers={'Access-Control-Allow-Origin': '*'})
     elif request.method == 'POST':
         post = Post()
         post.text = request.data['text']
         post.save()
-        return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_200_OK, headers={'Access-Control-Allow-Origin': '*'})
 
 
 @api_view(['GET'])

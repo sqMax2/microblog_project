@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import PostService from "./PostService";
+import {flushSync} from "react-dom";
 
 const postService = new PostService();
 
@@ -10,6 +11,7 @@ export default class Posts extends Component {
             data : [],
             inputValue: ''
         };
+        this.inputField = React.createRef();
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -19,14 +21,23 @@ export default class Posts extends Component {
 	}
 
 	handleSubmit(event) {
-    	postService.createPost({'text' : this.state.inputValue});
-    	this.getData()
-    	this.setState({inputValue : ''})
+    	postService.createPost({'text' : this.state.inputValue}).then(() => {
+            this.getData();
+    	    this.setState({inputValue : ''});
+        });
 	}
+
+    scrollToBottom() {
+        this.inputField.current.scrollIntoView();
+    }
 
     getData(){
     postService.getPosts().then(result => {
-        this.setState({data: result.data})
+        flushSync(() => {
+            this.setState({data: result.data});
+        });
+        this.inputField.current.focus();
+        this.scrollToBottom();
     	});
     }
 
@@ -44,16 +55,19 @@ export default class Posts extends Component {
         return (
             <div id = 'posts'>
             {this.state.data.map(post =>
-                <div id = {'post_' + post.id}>
+                <div id = {'post_' + post.id} key={post.id}>
                     <p> {post.text} </p>
                     <button onClick={() => this.setLike(post)}>  {post.likesCount}</button>
                     <p> Date : {post.date}</p>
                     <hr/>
                 </div>
             )}
-            <input type='text' onChange={this.handleChange} value={this.state.inputValue}></input><button onClick={this.handleSubmit}>Send</button>
+
+                <input type='text' onChange={this.handleChange} value={this.state.inputValue}
+                       onKeyDown={e => e.key === 'Enter' ? this.handleSubmit(e) : ''}
+                       ref={this.inputField}></input>
+                <button onClick={this.handleSubmit}>Send</button>
             </div>
             )
     }
-
 }

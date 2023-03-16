@@ -22,7 +22,7 @@ from microblog import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path(r'api/posts/', views.posts),
-    path(r'api/like_post/(?P<post_id>[0-9]+)', views.like_post),
+    re_path(r'api/posts', views.posts),
+    re_path(r'api/like_post/(?P<post_id>[0-9]+)', views.like_post),
     path('', views.AppView.as_view())
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
