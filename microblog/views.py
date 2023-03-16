@@ -25,6 +25,16 @@ def posts(request):
         return Response(status=status.HTTP_200_OK, headers={'Access-Control-Allow-Origin': '*'})
 
 
+@api_view(['DELETE'])
+def delete_post(request, post_id):
+    try:
+        post = Post.objects.get(id=post_id)
+    except:
+        return Response(status=status.HTTP_400_BAD_REQUEST, headers={'Access-Control-Allow-Origin': '*'})
+    post.delete()
+    return Response(status=status.HTTP_200_OK, headers={'Access-Control-Allow-Origin': '*'})
+
+
 @api_view(['GET'])
 def like_post(request, post_id):
     if request.method == 'GET':

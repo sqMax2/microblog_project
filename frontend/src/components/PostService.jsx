@@ -18,4 +18,9 @@ export default class PostService{
 		const url = `${API_URL}/api/posts/`;
 		return axios.post(url,text);
 	}
+
+    deletePost(id) {
+    const url = `${API_URL}/api/del_post/${id}`;
+    return axios.delete(url);
+    }
 }
